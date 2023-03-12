@@ -4,26 +4,35 @@ const PersonForm = ({persons, setPersons, newName, setNewName, newNumber, setNew
   const addPerson = (event) => {
     event.preventDefault()
     // check if the person is already existed
-    if (persons.find((person) => person.name.toLowerCase() === newName.toLowerCase())) {
-      window.alert(`${newName} is already added to phonebook`)
-      setNewName("")
-      setNewNumber("")
-      return
+    const targetPerson = persons.find((person) => person.name.toLowerCase() === newName.toLowerCase())
+    if (targetPerson) {
+      if (window.confirm(`${targetPerson.name} is already added to phonebook, replace the old number with a new one?`)) {
+        // update the person at the backend
+        personService
+          .update(targetPerson.id, {...targetPerson, number: newNumber})
+          .then((updatedPerson) => {
+            // update the person at the frontend
+            setPersons(persons.map((person) => (person.id === updatedPerson.id ? updatedPerson : person)))
+            setNewName("")
+            setNewNumber("")
+          })
+      }
+    } else {
+      const newPersonObject = {
+        id: persons.length + 1,
+        name: newName,
+        number: newNumber,
+      }
+      // add person to the backend
+      personService
+        .create(newPersonObject)
+        .then((returnedPerson) => {
+          // add person to the frontend
+          setPersons(persons.concat(returnedPerson))
+          setNewName("")
+          setNewNumber("")
+        })
     }
-    const newPersonObject = {
-      id: persons.length + 1,
-      name: newName,
-      number: newNumber,
-    }
-    // add person to the backend
-    personService
-      .create(newPersonObject)
-      .then((returnedPerson) => {
-        // add person to the frontend
-        setPersons(persons.concat(returnedPerson))
-        setNewName("")
-        setNewNumber("")
-      })
   }
   
   const handleNewNameChange = (event) => {
