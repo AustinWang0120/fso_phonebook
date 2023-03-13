@@ -1,6 +1,6 @@
 import personService from "../services/persons"
 
-const PersonForm = ({persons, setPersons, newName, setNewName, newNumber, setNewNumber}) => {
+const PersonForm = ({persons, setPersons, newName, setNewName, newNumber, setNewNumber, setMessage, setMessageType}) => {
   const addPerson = (event) => {
     event.preventDefault()
     // check if the person is already existed
@@ -15,6 +15,12 @@ const PersonForm = ({persons, setPersons, newName, setNewName, newNumber, setNew
             setPersons(persons.map((person) => (person.id === updatedPerson.id ? updatedPerson : person)))
             setNewName("")
             setNewNumber("")
+            // show the notification for 3 seconds
+            setMessageType("notification")
+            setMessage(`Updated ${updatedPerson.name}`)
+            setTimeout(() => {
+              setMessage(null)
+            }, 3000)
           })
       }
     } else {
@@ -31,6 +37,12 @@ const PersonForm = ({persons, setPersons, newName, setNewName, newNumber, setNew
           setPersons(persons.concat(returnedPerson))
           setNewName("")
           setNewNumber("")
+          // show the notification for 3 seconds
+          setMessageType("notification")
+          setMessage(`Added ${returnedPerson.name}`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 3000)
         })
     }
   }
