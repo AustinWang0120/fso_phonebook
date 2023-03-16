@@ -3,6 +3,7 @@ const Notification = ({message, messageType}) => {
     return null
   }
 
+  // messageType: "notification" || "error"
   return (
     <div className={messageType}>
       {message}

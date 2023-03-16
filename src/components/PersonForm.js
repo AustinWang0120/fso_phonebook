@@ -22,6 +22,13 @@ const PersonForm = ({persons, setPersons, newName, setNewName, newNumber, setNew
               setMessage(null)
             }, 3000)
           })
+          .catch((error) => {
+            setMessageType("error")
+            setMessage(error.response.data.error)
+            setTimeout(() => {
+              setMessage(null)
+            }, 3000)
+          })
       }
     } else {
       const newPersonObject = {
@@ -40,6 +47,13 @@ const PersonForm = ({persons, setPersons, newName, setNewName, newNumber, setNew
           // show the notification for 3 seconds
           setMessageType("notification")
           setMessage(`Added ${returnedPerson.name}`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 3000)
+        })
+        .catch((error) => {
+          setMessageType("error")
+          setMessage(error.response.data.error)
           setTimeout(() => {
             setMessage(null)
           }, 3000)
